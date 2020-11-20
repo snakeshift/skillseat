@@ -1,0 +1,25 @@
+.h100p {
+  height: 100%;
+}
+.w100p {
+  width: 100%;
+}
+.pos-rel {
+  position: relative !important;
+}
+.pos-abs {
+  position: absolute !important;
+}
+.link{
+  color: #1E88E5 !important;
+  text-decoration:underline;
+}
+.pointer{
+  cursor: pointer;
+}
+.pointer-none{
+  pointer-events: none;
+}
+.border-initial {
+  border-radius: initial !important;
+}

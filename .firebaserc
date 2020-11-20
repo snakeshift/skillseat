@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "skillseat-6cf8a"
+  },
+  "targets": {
+    "skillseat-6cf8a": {
+      "hosting": {
+        "skillseat": [
+          "skillseat"
+        ]
+      }
+    }
+  }
+}
