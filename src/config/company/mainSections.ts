@@ -1,4 +1,4 @@
-import { MainSections } from '@/types/company/mainSection'
+import { MainSections } from '@/types/config/company/mainSection'
 
 export enum MAIN_SECTION_IDS {
   SERVER = 1,

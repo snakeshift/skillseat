@@ -1,5 +1,7 @@
 <template>
-  <div class="navigation"></div>
+  <div class="navigation">
+    <v-row class="ml-2 pa-3"></v-row>
+  </div>
 </template>
 
 <script lang="ts">

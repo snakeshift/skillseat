@@ -3,6 +3,13 @@
     <v-row>
       <v-col class="title ml-5">SkillSeat</v-col>
       <v-col class="mr-5 text-right">
+        <v-btn text :to="{ name: 'Top' }">
+          1
+        </v-btn>
+        <v-btn text :to="{ name: 'Room' }">
+          2
+        </v-btn>
+
         <!-- <v-avatar color="indigo" size="36">
           <v-icon dark>
             mdi-account

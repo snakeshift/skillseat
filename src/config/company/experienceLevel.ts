@@ -1,4 +1,4 @@
-import { ExperienceLevels } from '@/types/company/experienceLevel'
+import { ExperienceLevels } from '@/types/config/company/experienceLevel'
 
 export enum EXPERIENCE_LEVEL_ID {
   ROOKIE = 1,

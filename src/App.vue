@@ -3,8 +3,13 @@
     <div class="d-flex flex-column h100p">
       <Header />
       <Navigation />
-      <div class="w100p">
-        <router-view />
+      <div class="w100p flex-grow-1">
+        <transition
+          enter-active-class="animate__animated animate__fadeIn"
+          leave-active-class="animate__animated animate__fadeOut"
+        >
+          <router-view />
+        </transition>
       </div>
     </div>
   </v-app>
@@ -21,9 +26,9 @@ export default defineComponent({
     Header,
     Navigation
   },
-  data: () => ({
-    //
-  })
+  setup() {
+    return {}
+  }
 })
 </script>
 
@@ -32,6 +37,7 @@ export default defineComponent({
 </style>
 
 <style lang="scss">
+@import '~animate.css/animate.min.css';
 @import './assets/scss/index.scss';
 .v-application--wrap {
   background: #292b39;

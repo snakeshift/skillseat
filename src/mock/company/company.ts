@@ -1,4 +1,4 @@
-import { Company } from '@/types/company/company'
+import { Company } from '@/types/config/company/company'
 import { employees } from '@/mock/company/employees'
 
 export const company: Company = {
