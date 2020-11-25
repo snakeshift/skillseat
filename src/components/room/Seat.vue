@@ -2,19 +2,21 @@
   <div class="seat" :style="getPosition" :class="{ sorted: sorted }">
     <transition
       appear
+      @before-enter="beforeEnter"
       :enter-active-class="enterActiveClass"
       :leave-active-class="leaveActiveClass"
     >
       <div class="icon" v-show="!sorting.init || sorting.afterInit">
-        <div class="topSeat" :style="{ backgroundColor: getColor() }"></div>
-        <div class="bottomSeat" :style="{ backgroundColor: getColor() }"></div>
+        <div class="topSeat" :style="{ backgroundColor: seat.colorCode }"></div>
+        <div
+          class="bottomSeat"
+          :style="{ backgroundColor: seat.colorCode }"></div>
       </div>
     </transition>
   </div>
 </template>
 
 <script lang="ts">
-import colors from 'vuetify/lib/util/colors'
 import {
   defineComponent,
   PropType,
@@ -22,10 +24,7 @@ import {
   computed,
   reactive
 } from '@vue/composition-api'
-import { Employee } from '@/types/config/company/employee'
-import { MAIN_SECTIONS } from '@/config/company/mainSections'
-import { EXPERIENCE_LEVEL_ID } from '@/config/company/experienceLevel'
-import { Color, BaseColor } from '@/types/config/common/color'
+import { Seat } from '@/types/components/room/seat'
 import { getRandWithBias } from '@/utils/rand'
 import { sleep } from '@/utils/sleep'
 
@@ -38,8 +37,8 @@ export default defineComponent({
   name: 'Seat',
   components: {},
   props: {
-    employee: {
-      type: Object as PropType<Employee>,
+    seat: {
+      type: Object as PropType<Seat>,
       default: () => {
         return {}
       }
@@ -52,10 +51,6 @@ export default defineComponent({
       type: Number,
       default: 0
     },
-    // sorting: {
-    //   type: Boolean,
-    //   default: false
-    // },
     position: {
       type: Object as PropType<Position>,
       default: () => {
@@ -64,28 +59,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const getColor = (): string => {
-      const level = props.employee.experienceLevel
-      const color: Color = MAIN_SECTIONS[props.employee.mainSection].seatColor
-
-      const brightnessLevel = Math.abs(level - EXPERIENCE_LEVEL_ID.EXPERT) as
-        | EXPERIENCE_LEVEL_ID.ROOKIE
-        | EXPERIENCE_LEVEL_ID.LOW_LEVEL
-        | EXPERIENCE_LEVEL_ID.MID_LEVEL
-        | EXPERIENCE_LEVEL_ID.TOP_LEVEL
-        | EXPERIENCE_LEVEL_ID.EXPERT
-
-      const baseColor =
-        level === EXPERIENCE_LEVEL_ID.EXPERT
-          ? 'base'
-          : (`lighten${brightnessLevel}` as BaseColor)
-
-      const colorCode = colors[color][baseColor]
-      return colorCode
-    }
     const getPosition = computed(() => {
-      // const randY = arrY[Math.floor(Math.random() * arrY.length)]
-      // const randY = Math.floor(Math.random() * 101)
       const AREA_Y: { [key: number]: number } = {
         0: 0,
         1: 25, // y:0 → 25%の間
@@ -113,6 +87,7 @@ export default defineComponent({
       // const randRotate = `${Math.floor(Math.random() * 361)}deg`
       const randRotate = '0deg'
       return {
+        '--animate-delay': `${props.seat.delay}ms`,
         '--top-pos': randTop,
         '--left-pos': randLeft,
         '--rotate-deg': randRotate,
@@ -127,31 +102,36 @@ export default defineComponent({
     const setInitSorting = async () => {
       await sleep(500)
       sorting.init = true
-      await sleep(props.animationMilliseconds + props.animationMilliseconds * 0.8)
+      await sleep(
+        props.animationMilliseconds + props.animationMilliseconds * 0.8
+      )
       sorting.afterInit = true
-      // await sleep(1000)
-      // sorting.init = false
     }
     // 開始アニメーション
     const enterActiveClass = computed(() => {
       return sorting.afterInit && props.sorted
-        ? 'animate__animated animate__backInDown animate__fast'
-        : 'animate__animated animate__fadeInUp animate__faster'
+        ? 'animate__animated animate__backInDown animate__fast delayAnimatinon'
+        : 'animate__animated animate__fadeInUp animate__faster delayAnimatinon'
     })
     // 終了アニメーション
     const leaveActiveClass = computed(() => {
-      return 'animate__animated animate__fadeOutDown animate__fast'
+      return 'animate__animated animate__fadeOutDown animate__fast delayAnimatinon'
     })
+
+    const beforeEnter = (el: HTMLElement) => {
+      // console.log(props.seat.delay + 'ms')
+      // el.style.transitionDelay = props.seat.delay + 'ms'
+      // console.log(el.style)
+    }
     onMounted(() => {
       setInitSorting()
-      // console.log(MAIN_SECTIONS)
     })
     return {
       sorting,
-      getColor,
       getPosition,
       enterActiveClass,
-      leaveActiveClass
+      leaveActiveClass,
+      beforeEnter
     }
   }
 })
@@ -159,6 +139,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .seat {
+  /* 遅延用のcss変数 */
+  --animate-delay: 0;
+
   /* ソート前使用のcss変数 */
   --top-pos: 0;
   --left-pos: 0;
@@ -188,7 +171,8 @@ export default defineComponent({
     flex-direction: column;
     align-items: center;
     margin: 2px;
-    transition: 0.5s;
+    // transition: 0.5s;
+    // transition-delay: 2s;
     .topSeat {
       height: 18px;
       width: 24px;
@@ -201,6 +185,8 @@ export default defineComponent({
       border-radius: 5px;
     }
   }
-  // position: absolute;
+  .delayAnimatinon {
+    // animation-delay: var(--animate-delay);
+  }
 }
 </style>

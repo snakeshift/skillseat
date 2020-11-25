@@ -5,7 +5,3 @@ export interface Employee {
   experienceLevel: number
   skills: []
 }
-
-export interface Employees {
-  [index: number]: Employee
-}
